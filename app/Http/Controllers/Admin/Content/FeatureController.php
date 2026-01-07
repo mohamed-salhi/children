@@ -18,7 +18,7 @@ class FeatureController extends Controller
 
     public function index()
     {
-//       return $services = SectionService::query()->orderByDesc('created_at')->get();
+       return $services = SectionService::query()->orderByDesc('created_at')->get();
 
         return view('admin.content.section_features');
     }

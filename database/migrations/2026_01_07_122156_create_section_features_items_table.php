@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('section_features', function (Blueprint $table) {
+        Schema::create('section_features_items', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('details');
+            $table->foreignId('section_feature_id')->on('section_features')->cascadeOnUpdate();
+
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('section_features');
+        Schema::dropIfExists('section_features_items');
     }
 };

@@ -10,8 +10,8 @@ class SectionFeatures extends Model
 {
     use  HasTranslations;
 
-    protected $appends=['image','title_translate','details_translate'];
-    protected $translatable = ['title','details'];
+    protected $appends=['image'];
+    protected $translatable = ['title'];
     protected $guarded = [];
     const PATH_IMAGE='/upload/features/images/';
 
@@ -21,14 +21,9 @@ class SectionFeatures extends Model
         return $this->morphOne(Upload::class, 'imageable');
     }
 
-    //Attributes
-    public function getTitleTranslateAttribute()
+    public function items()
     {
-        return @$this->title;
-    }
-    public function getDetailsTranslateAttribute()
-    {
-        return @$this->details;
+        return $this->hasMany(SectionFeaturesItems::class, 'section_feature_id');
     }
 
 

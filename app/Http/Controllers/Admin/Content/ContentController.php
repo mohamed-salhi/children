@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin\Content;
 
 use App\Http\Controllers\Controller;
+use App\Models\SectionFeatures;
+use App\Models\SectionFeaturesItems;
 use App\Models\SectionHero;
 use App\Models\SectionJourney;
 use App\Models\SectionJourneyItem;
+use App\Models\SectionService;
 use App\Models\Setting;
 use App\Models\Upload;
 use Illuminate\Http\Request;
@@ -108,6 +111,63 @@ class ContentController extends Controller
 
             }
         }
+        return response()->json([
+            'تم تحديث الإعدادات بنجاح'
+        ]);
+    }
+
+
+    public function getFeaturesSection()
+    {
+        $features = SectionFeatures::query()->with('items')->first();
+
+        return view('admin.content.section_features', compact('features'));
+    }
+
+    public function postFeaturesSection(Request $request)
+    {
+
+        foreach (locales() as $key => $language) {
+            $rules['title_' . $key] = 'required|string|max:45';
+        }
+        $rules['image'] = 'nullable|image';
+
+        $request->validate($rules);
+
+        $data = [];
+        foreach (locales() as $key => $language) {
+            $data['title'][$key] = $request->get('title_' . $key);
+        }
+
+        $feature = SectionFeatures::query()->updateOrCreate(
+            ['id' => 1],   // مفتاح البحث
+            $data
+        );
+        if ($request->has('image')) {
+            UploadImage($request->image, SectionFeatures::PATH_IMAGE, SectionFeatures::class, $feature->id, true, null, Upload::IMAGE);
+        }
+
+        $feature->items()->delete();
+        $count = count($request->title_item_en);
+
+        for ($i = 0; $i < $count; $i++) {
+         $item=   SectionFeaturesItems::create([
+                'section_feature_id' => 1,
+                'title' => [
+                    'en' => [$request->title_item_en[$i]],
+                    'ar' => [$request->title_item_ar[$i]],
+                ],
+                'details' => [
+                    'en' => [$request->details_item_en[$i]],
+                    'ar' => [$request->details_item_ar[$i]],
+                ]
+            ]);
+            if (@$request->image_item[$i]) {
+                UploadImage($request->image_item[$i], SectionFeaturesItems::PATH_IMAGE, SectionFeaturesItems::class, $item->id, true, null, Upload::IMAGE);
+            }
+
+        }
+
         return response()->json([
             'تم تحديث الإعدادات بنجاح'
         ]);

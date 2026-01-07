@@ -12,4 +12,5 @@ class SectionJourneyItem extends Model
     protected $guarded=[];
     protected $translatable = ['item'];
 
+
 }

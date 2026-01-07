@@ -38,21 +38,150 @@
 
                             </div>
 
-                            <div class="table-responsive card-datatable" style="padding: 20px">
-                                <table class="table" id="datatable">
-                                    <thead>
-                                    <tr>
-                                        <th>@lang('title')</th>
-                                        <th>@lang('details')</th>
-                                        <th>@lang('image')</th>
+                            <form action="{{ route('content.postFeaturesSection') }}" method="POST"
+                                  id="add-mode-form" class="add-mode-form"
+                                  enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-body">
 
-                                        <th style="width: 225px;">@lang('actions')</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody></tbody>
+                                    @foreach (locales() as $key => $value)
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="title_{{ $key }}">@lang('title') @lang($value)</label>
+                                                <input type="text" class="form-control"
+                                                       placeholder="@lang('title') @lang($value)"
+                                                       name="title_{{ $key }}"
+                                                       value="{{@$features->getTranslation('title', $key) }}"
+                                                >
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
 
-                                </table>
-                            </div>
+                                    @endforeach
+                                    <div class="col-12">
+                                        <label for="icon">@lang('flag')</label>
+                                        <div>
+                                            <div class="fileinput fileinput-exists"
+                                                 data-provides="fileinput">
+                                                <div class="fileinput-preview thumbnail"
+                                                     data-trigger="fileinput"
+                                                     style="width: 200px; height: 150px;">
+                                                    <img id="edit_src_image"
+                                                         src="{{$features->image}}"
+                                                         alt=""/>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span class="btn btn-secondary btn-file">
+                                                        <span class="fileinput-new"> @lang('select_image')</span>
+                                                        <span class="fileinput-exists"> @lang('select_image')</span>
+                                                        <input class="form-control" type="file" name="image">
+                                                    </span>
+                                                    <div class="invalid-feedback" style="display: block;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-header bg-dark">
+                                                <h4 class="m-0" style="color: white">@lang('Items')</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="text-right mt-3">
+                                                    <a id="addRow"
+                                                       class="add_row btn btn-sm btn-dark">@lang('Add Row')</a>
+                                                </div>
+                                                <br>
+                                                <br>
+                                                <div class="row_data">
+                                                    @foreach($features->items as $item)
+                                                        <div class="row mb-3 ss">
+                                                            <div class="col-md-11">
+                                                                <div class="row">
+                                                                    @foreach (locales() as $key => $value)
+                                                                        <div class="col-12">
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="title_{{ $key }}">@lang('title') @lang($value)</label>
+                                                                                <input type="text" class="form-control"
+                                                                                       placeholder="@lang('title') @lang($value)"
+                                                                                       name="title_item_{{ $key }}[]"
+                                                                                       value="{{ $item->getTranslation('title', $key)[0] ?? '' }}"
+
+                                                                                >
+                                                                                <div class="invalid-feedback"></div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    @endforeach
+                                                                    @foreach (locales() as $key => $value)
+                                                                        <div class="col-12">
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="details_{{ $key }}">@lang('details') @lang($value)</label>
+                                                                                <input type="text" class="form-control"
+                                                                                       placeholder="@lang('details') @lang($value)"
+                                                                                       name="details_item_{{ $key }}[]"
+                                                                                       value="{{ $item->getTranslation('details', $key)[0] ?? '' }}"
+
+                                                                                >
+                                                                                <div class="invalid-feedback"></div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    @endforeach
+                                                                    <div class="col-12">
+                                                                        <label for="icon">@lang('flag')</label>
+                                                                        <div>
+                                                                            <div class="fileinput fileinput-exists"
+                                                                                 data-provides="fileinput">
+                                                                                <div class="fileinput-preview thumbnail"
+                                                                                     data-trigger="fileinput"
+                                                                                     style="width: 200px; height: 150px;">
+                                                                                    <img id="src_image"
+                                                                                         src="{{ $item->image }}"
+                                                                                         alt=""/>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                    <span class="btn btn-secondary btn-file">
+                                                        <span class="fileinput-new"> @lang('select_image')</span>
+                                                        <span class="fileinput-exists"> @lang('select_image')</span>
+                                                        <input class="form-control" type="file" name="image_item[]">
+                                                    </span>
+                                                                                    <div class="invalid-feedback"
+                                                                                         style="display: block;"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <a class="btn btn-danger w-100 remove_row"><i
+                                                                        class="fas fa-times"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary done">@lang('save')</button>
+
+                                        <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">@lang('close')</button>
+                                    </div>
+                                </div>
+                            </form>
+
+
                         </div>
                     </div>
                 </div>
@@ -61,82 +190,6 @@
         </div>
     </div>
 
-
-    <!-- Modal -->
-    <div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">@lang('edit')</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{{ route('content.features.update') }}" method="POST" id="form_edit" class=""
-                      enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="id" id="id" class="form-control"/>
-                    <div class="modal-body">
-                        @foreach (locales() as $key => $value)
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="title_{{ $key }}">@lang('title') @lang($value)</label>
-                                    <input type="text" class="form-control"
-                                           placeholder="@lang('title') @lang($value)"
-                                           name="title_{{ $key }}" id="edit_title_{{ $key }}">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-
-                        @endforeach
-                        @foreach (locales() as $key => $value)
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="details_{{ $key }}">@lang('details') @lang($value)</label>
-                                    <input type="text" class="form-control"
-                                           placeholder="@lang('details') @lang($value)"
-                                           name="details_{{ $key }}" id="edit_details_{{ $key }}">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-
-                        @endforeach
-
-                        <div class="col-12">
-                            <label for="icon">@lang('flag')</label>
-                            <div>
-                                <div class="fileinput fileinput-exists"
-                                     data-provides="fileinput">
-                                    <div class="fileinput-preview thumbnail"
-                                         data-trigger="fileinput"
-                                         style="width: 200px; height: 150px;">
-                                        <img id="edit_src_image"
-                                             src="{{asset('dashboard/app-assets/images/placeholder.jpeg')}}"
-                                             alt=""/>
-                                    </div>
-                                    <div class="form-group">
-                                                    <span class="btn btn-secondary btn-file">
-                                                        <span class="fileinput-new"> @lang('select_image')</span>
-                                                        <span class="fileinput-exists"> @lang('select_image')</span>
-                                                        <input class="form-control" type="file" name="image">
-                                                    </span>
-                                        <div class="invalid-feedback" style="display: block;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-primary done">@lang('save')</button>
-
-                            <button type="button" class="btn btn-secondary"
-                                    data-dismiss="modal">@lang('close')</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 @endsection
 @section('scripts')
     <script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/ckeditor.js"></script>
@@ -147,83 +200,78 @@
             }
         });
         //bindTable
-        var table = $('#datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            "bFilter": false,
-            "oLanguage": {
-                @if (app()->isLocale('ar'))
-                "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
-                "sLoadingRecords": "جارٍ التحميل...",
-                "sProcessing": "جارٍ التحميل...",
-                "sLengthMenu": "أظهر _MENU_ مدخلات",
-                "sZeroRecords": "لم يعثر على أية سجلات",
-                "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
-                "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
-                "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
-                "sInfoPostFix": "",
-                "sSearch": "ابحث:",
-                "oAria": {
-                    "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
-                    "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
-                },
-                @endif // "oPaginate": {"sPrevious": '<-', "sNext": '->'},
-            },
-            ajax: {
-                url: '{{ route('content.features.indexTable', app()->getLocale()) }}',
+        $('.add_row').click(function (e) {
+            e.preventDefault();
+            console.log('ddd')
+            const row = `<div class="row mb-3 ss">
+                        <div class="col-md-11">
+                            <div class="row">
+                                  @foreach (locales() as $key => $value)
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="title_{{ $key }}">@lang('title') @lang($value)</label>
+                                                        <input type="text" class="form-control"
+                                                               placeholder="@lang('title') @lang($value)"
+                                                               name="title_item_{{ $key }}[]"  >
+                                                        <div class="invalid-feedback"></div>
+                                                    </div>
+                                                </div>
 
-            },
+                                            @endforeach
+            @foreach (locales() as $key => $value)
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="details_{{ $key }}">@lang('details') @lang($value)</label>
+                                                        <input type="text" class="form-control"
+                                                               placeholder="@lang('details') @lang($value)"
+                                                               name="details_item_{{ $key }}[]"  >
+                                                        <div class="invalid-feedback"></div>
+                                                    </div>
+                                                </div>
 
-            columns: [
-                {
-                    data: 'title_translate',
-                    name: 'title',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'details_translate',
-                    name: 'details',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    "data": 'image',
-                    "name": 'image',
-                    render: function (data, type, full, meta) {
-                        return `<img src="${data}" style="width:100px;height:100px;"  class="img-fluid img-thumbnail">`;
-                    },
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: true
-                },
-            ]
+                                            @endforeach
+            <div class="col-12">
+<label for="icon">@lang('flag')</label>
+                                            <div>
+                                                <div class="fileinput fileinput-exists"
+                                                     data-provides="fileinput">
+                                                    <div class="fileinput-preview thumbnail"
+                                                         data-trigger="fileinput"
+                                                         style="width: 200px; height: 150px;">
+                                                        <img id="src_image"
+                                                             src=""
+                                                             alt=""/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                    <span class="btn btn-secondary btn-file">
+                                                        <span class="fileinput-new"> @lang('select_image')</span>
+                                                        <span class="fileinput-exists"> @lang('select_image')</span>
+                                                        <input class="form-control" type="file" name="image_item[]">
+                                                    </span>
+                                                        <div class="invalid-feedback" style="display: block;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-        });
+
+
+
+            </div>
+        </div>
+        <div class="col-md-1">
+            <a class="btn btn-danger w-100 remove_row"><i class="fas fa-times"></i></a>
+        </div>
+    </div>`;
+
+            $('.row_data').append(row);
+
+        })
         $(document).ready(function () {
-            $(document).on('click', '.btn_edit', function (event) {
-                $('input').removeClass('is-invalid');
-                $('.invalid-feedback').text('');
-                event.preventDefault();
-                var button = $(this)
-                var id = button.data('id')
-                $('#id').val(id);
-                @foreach (locales() as $key => $value)
-                $('#edit_title_{{ $key }}').val(button.data('title_{{ $key }}'))
-                $('#edit_details_{{ $key }}').val(button.data('details_{{ $key }}'))
-
-                @endforeach
-
-                $('#edit_src_image').attr('src', button.data('image'));
-
-
-            });
-        });
+            $('body').on('click', '.remove_row', function (e) {
+                e.preventDefault();
+                $(this).parent().parent().remove();
+            })
+        })
     </script>
 @endsection

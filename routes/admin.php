@@ -96,9 +96,9 @@ Route::group(
                 Route::post('service/update', [\App\Http\Controllers\Admin\Content\ServiceController::class, 'update'])->name('service.update');
                 Route::get('service/indexTable', [\App\Http\Controllers\Admin\Content\ServiceController::class, 'indexTable'])->name('service.indexTable');
 
-                Route::get('features', [\App\Http\Controllers\Admin\Content\FeatureController::class, 'index'])->name('features.index');
-                Route::post('features/update', [\App\Http\Controllers\Admin\Content\FeatureController::class, 'update'])->name('features.update');
-                Route::get('features/indexTable', [\App\Http\Controllers\Admin\Content\FeatureController::class, 'indexTable'])->name('features.indexTable');
+
+                Route::get('features', [\App\Http\Controllers\Admin\Content\ContentController::class, 'getFeaturesSection'])->name('getFeaturesSection');
+                Route::post('features', [\App\Http\Controllers\Admin\Content\ContentController::class, 'postFeaturesSection'])->name('postFeaturesSection');
 
             });
         });
