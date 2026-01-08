@@ -45,7 +45,6 @@ class BlogCategoryController extends Controller
         if (empty($data['slug']) || !is_array($data['slug'])) {
             $data['slug'] = generateLocalizedSlugs($data['name']);
         }
-
         $data['updated_by'] = auth('admin')->id();
         $BlogCategory->update($data);
         return response()->json(['item_edited']);
