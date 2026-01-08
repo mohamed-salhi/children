@@ -99,6 +99,9 @@ Route::group(
                 Route::get('features', [\App\Http\Controllers\Admin\Content\ContentController::class, 'getFeaturesSection'])->name('getFeaturesSection');
                 Route::post('features', [\App\Http\Controllers\Admin\Content\ContentController::class, 'postFeaturesSection'])->name('postFeaturesSection');
 
+                Route::get('contact', [\App\Http\Controllers\Admin\Content\ContentController::class, 'getContactSection'])->name('getContactSection');
+                Route::post('contact', [\App\Http\Controllers\Admin\Content\ContentController::class, 'posContactSection'])->name('posContactSection');
+
             });
         });
 

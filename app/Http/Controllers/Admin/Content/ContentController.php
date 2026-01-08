@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Content;
 
 use App\Http\Controllers\Controller;
+use App\Models\SectionContact;
 use App\Models\SectionFeatures;
 use App\Models\SectionFeaturesItems;
 use App\Models\SectionHero;
@@ -163,7 +164,7 @@ class ContentController extends Controller
                     'ar' => [$request->details_item_ar[$i]],
                 ]
             ]);
-            if (@$request->image_item[$i]) {
+            if (isset($request->image_item[$i])) {
                 UploadImage($request->image_item[$i], SectionFeaturesItems::PATH_IMAGE, SectionFeaturesItems::class, $item->id, true, null, Upload::IMAGE);
             }
 
@@ -188,6 +189,18 @@ class ContentController extends Controller
             $rules['title_' . $key] = 'required|string|max:45';
         }
         $rules['image'] = 'nullable|image';
+        foreach (locales() as $key => $lang) {
+            $rules["title_item_$key"]   = 'required|array';
+            $rules["details_item_$key"] = 'required|array';
+            $rules["button_item_$key"]  = 'required|array';
+
+            $rules["title_item_$key.*"]   = 'required|string|max:255';
+            $rules["details_item_$key.*"] = 'required|string|max:500';
+            $rules["button_item_$key.*"]  = 'required|string|max:255';
+        }
+
+        $rules['image_item']   = 'nullable|array';
+        $rules['image_item.*'] = 'nullable|image|mimes:jpg,png,jpeg,webp|max:2048';
 
         $request->validate($rules);
 
@@ -233,4 +246,41 @@ class ContentController extends Controller
             'تم تحديث الإعدادات بنجاح'
         ]);
     }
+
+    public function getContactSection()
+    {
+        $contact = SectionContact::query()->first();
+        return view('admin.content.section_contact', compact('contact'));
+    }
+
+    public function posContactSection(Request $request)
+    {
+
+        $rules = [];
+        foreach (locales() as $key => $language) {
+            $rules['title_' . $key] = 'required|string|max:45';
+            $rules['details_' . $key] = 'required|string|max:45';
+        }
+        $rules['image'] = 'nullable|image';
+
+        $request->validate($rules);
+
+        $data = [];
+        foreach (locales() as $key => $language) {
+            $data['title'][$key] = $request->get('title_' . $key);
+            $data['details'][$key] = $request->get('details_' . $key);
+        }
+
+        $contact = SectionContact::query()->updateOrCreate(
+            ['id' => 1],   // مفتاح البحث
+            $data
+        );
+        if ($request->has('image')) {
+            UploadImage($request->image, SectionContact::PATH_IMAGE, SectionContact::class, $contact->id, true, null, Upload::IMAGE);
+        }
+        return response()->json([
+            'تم تحديث الإعدادات بنجاح'
+        ]);
+    }
+
 }

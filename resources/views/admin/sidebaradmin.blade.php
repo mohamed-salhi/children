@@ -89,6 +89,12 @@
                                     class="menu-title text-truncate">@lang('Section Our Features')</span>
                             </a>
                         </li>
+                        <li class="nav-item {{ request()->routeIs('content.getContactSection') ? 'active' : '' }} ">
+                            <a class="d-flex align-items-center" href="{{ route('content.getContactSection') }}">
+                                <i data-feather="file-text"></i><span
+                                    class="menu-title text-truncate">@lang('Section Contact Us')</span>
+                            </a>
+                        </li>
                     </ul>
 
                 </li>
