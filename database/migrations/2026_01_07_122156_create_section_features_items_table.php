@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('details');
+
             $table->string('icon');
 
             $table->foreignId('section_feature_id')->on('section_features')->cascadeOnUpdate();

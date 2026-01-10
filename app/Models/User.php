@@ -13,7 +13,11 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+<<<<<<< HEAD
     use HasFactory, Notifiable ,HasApiTokens;
+=======
+    use HasFactory, Notifiable;
+>>>>>>> 278d07bbeded43eed01bbcb0228afc9d136270ea
 
     /**
      * The attributes that are mass assignable.
@@ -22,13 +26,22 @@ class User extends Authenticatable
      */
     protected $primaryKey = 'uuid';
     public $incrementing = false;
+<<<<<<< HEAD
 
+=======
+    protected $appends = ['image'];
+    const COMPANY = 2;
+    const INDIVIDUAL = 1;
+>>>>>>> 278d07bbeded43eed01bbcb0228afc9d136270ea
 
     protected $fillable = [
         'name',
         'email',
+<<<<<<< HEAD
         'date_of_birth',
         'gender',
+=======
+>>>>>>> 278d07bbeded43eed01bbcb0228afc9d136270ea
         'password',
     ];
 
@@ -56,6 +69,30 @@ class User extends Authenticatable
     }
 
 
+<<<<<<< HEAD
+=======
+    const PATH_IMAGE = "/upload/user/personal/";
+
+    public function imageUser()
+    {
+        return $this->morphOne(Upload::class, 'imageable')->where('type', '=', Upload::IMAGE);
+    }
+
+    public function fcm_tokens()
+    {
+        return $this->hasMany(FcmToken::class, 'user_uuid');
+    }
+
+    public function getImageAttribute()
+    {
+        if (@$this->imageUser->filename) {
+            return !is_null(@$this->imageUser->path) ? @$this->imageUser->path : '';
+        } else {
+            return url('/') . '/dashboard/app-assets/images/4367.jpg';
+        }
+    }
+
+>>>>>>> 278d07bbeded43eed01bbcb0228afc9d136270ea
 
     public static function boot()
     {
@@ -63,6 +100,12 @@ class User extends Authenticatable
         self::creating(function ($item) {
             $item->uuid = Str::uuid();
         });
+<<<<<<< HEAD
+=======
+//        static::addGlobalScope('user', function (Builder $builder) {
+//            $builder->where('status', 1);//1==active
+//        });
+>>>>>>> 278d07bbeded43eed01bbcb0228afc9d136270ea
 
     }
 }

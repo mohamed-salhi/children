@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Content;
 
 use App\Http\Controllers\Controller;
 use App\Models\SectionContact;
+
 use App\Models\SectionFeatures;
 use App\Models\SectionFeaturesItems;
 use App\Models\SectionHero;
@@ -76,14 +77,15 @@ class ContentController extends Controller
         ];
 
         foreach (locales() as $key => $language) {
-            $rules['title_' . $key] = 'required|string|max:45';
+
+            $rules['title_' . $key]   = 'required|string|max:45';
             $rules['details_' . $key] = 'required|string|max:45';
         }
 
         $request->validate($rules);
         $data = [];
         foreach (locales() as $key => $language) {
-            $data['title'][$key] = $request->get('title_' . $key);
+            $data['title'][$key]   = $request->get('title_' . $key);
             $data['details'][$key] = $request->get('details_' . $key);
         }
 
@@ -112,6 +114,7 @@ class ContentController extends Controller
             ->values();
 
         // ================= Images (using name field) =================
+
         foreach (['image_1', 'image_2', 'image_3', 'image_4'] as $field) {
 
             if ($request->hasFile($field)) {
@@ -163,6 +166,8 @@ class ContentController extends Controller
         }
 
 
+
+
         return response()->json([
             'message' => 'تم تحديث الإعدادات بنجاح'
         ]);
@@ -197,12 +202,14 @@ class ContentController extends Controller
         );
         if ($request->has('cover_image')) {
             UploadImage($request->cover_image, SectionFeatures::PATH_IMAGE, SectionFeatures::class, $feature->id, true, null, Upload::IMAGE);
-        }
 
+        }
         $feature->items()->delete();
         $count = count($request->title_item_en);
+
+
         for ($i = 0; $i < $count; $i++) {
-            $item = SectionFeaturesItems::query()->create([
+            $item =   SectionFeaturesItems::create([
                 'section_feature_id' => 1,
                 'title' => [
                     'en' => [$request->title_item_en[$i]],
@@ -214,7 +221,6 @@ class ContentController extends Controller
                 ],
                 'icon' =>$request->icon_item[$i]
             ]);
-
         }
 
         return response()->json([
@@ -224,7 +230,8 @@ class ContentController extends Controller
 
     public function getServicesSection()
     {
-        $services = SectionService::query()->with('items')->first();
+
+        $services= SectionService::query()->with('items')->first();
 
         return view('admin.content.section_services', compact('services'));
     }
@@ -256,7 +263,8 @@ class ContentController extends Controller
         $count = count($request->title_item_en);
 
         for ($i = 0; $i < $count; $i++) {
-            $item = SectionServiceItems::create([
+
+            $item=   SectionServiceItems::create([
                 'section_service_id' => 1,
                 'title' => [
                     'en' => [$request->title_item_en[$i]],
@@ -266,10 +274,10 @@ class ContentController extends Controller
                     'en' => [$request->details_item_en[$i]],
                     'ar' => [$request->details_item_ar[$i]],
                 ],
-                'button' => [
-                    'en' => [$request->button_item_en[$i]],
-                    'ar' => [$request->button_item_ar[$i]],
-                ]
+                  'button' => [
+                'en' => [$request->button_item_en[$i]],
+                'ar' => [$request->button_item_ar[$i]],
+            ]
             ]);
             if (@$request->image_item[$i]) {
                 UploadImage($request->image_item[$i], SectionFeaturesItems::PATH_IMAGE, SectionServiceItems::class, $item->id, true, null, Upload::IMAGE);
@@ -281,6 +289,7 @@ class ContentController extends Controller
             'تم تحديث الإعدادات بنجاح'
         ]);
     }
+
     public function getContactSection()
     {
         $contact = SectionContact::query()->first();
@@ -316,5 +325,6 @@ class ContentController extends Controller
             'تم تحديث الإعدادات بنجاح'
         ]);
     }
+
 
 }

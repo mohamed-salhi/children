@@ -50,9 +50,8 @@
                             </div>
 
                             <div class="card-body">
-                                <form action="{{ route('content.postFeaturesSection') }}"
-                                      method="POST"  id="add-mode-form"
-                                      class="add-mode-form" enctype="multipart/form-data">
+                                <form action="{{ route('content.postFeaturesSection') }}"        id="add-mode-form" class="add-mode-form"
+                                      method="POST" enctype="multipart/form-data">
                                     @csrf
 
                                     {{-- ================= Titles ================= --}}
@@ -79,27 +78,12 @@
 
                                     <hr>
 
-{{--                                    --}}{{-- ================= Details ================= --}}
-{{--                                    <div class="mb-2">--}}
-{{--                                        <h5 class="text-muted mb-0">@lang('details')</h5>--}}
-{{--                                        <small class="text-muted">(AR / EN)</small>--}}
-{{--                                    </div>--}}
+                                    {{-- ================= Details ================= --}}
+                                    <div class="mb-2">
+                                        <h5 class="text-muted mb-0">@lang('details')</h5>
+                                        <small class="text-muted">(AR / EN)</small>
+                                    </div>
 
-{{--                                    <div class="row">--}}
-{{--                                        @foreach (locales() as $key => $value)--}}
-{{--                                            <div class="col-md-6">--}}
-{{--                                                <div class="form-group">--}}
-{{--                                                    <label class="font-weight-bold">--}}
-{{--                                                        @lang('details')--}}
-{{--                                                        <span class="badge badge-light text-dark ml-1">{{ $value }}</span>--}}
-{{--                                                    </label>--}}
-{{--                                                    <input type="text" class="form-control"--}}
-{{--                                                           name="details_{{ $key }}"--}}
-{{--                                                           value="{{$features->getTranslation('details', $key)}}">--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        @endforeach--}}
-{{--                                    </div>--}}
 
                                     <hr>
 

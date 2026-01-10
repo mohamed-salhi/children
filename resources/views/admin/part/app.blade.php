@@ -126,7 +126,7 @@
             background-color: #1e90ff;
         }
     </style>
-{{--    @vite('resources/js/app.js')--}}
+    {{--    @vite('resources/js/app.js')--}}
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -220,7 +220,7 @@
     style="background-color: #69ee2e">
     <div class="navbar-container d-flex content">
         <ul class="nav navbar-nav align-items-center ml-auto">
-{{--                        <x-not />--}}
+            {{--                        <x-not />--}}
             <li class="nav-item dropdown dropdown-language">
                 <a class="nav-link dropdown-toggle" id="dropdown-flag" href="javascript:void(0);"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -400,10 +400,10 @@
             return this.value;
         }).get();
     };
-    $('select').select2({
-        dir: '{{ LaravelLocalization::getCurrentLocaleDirection() }}',
-        placeholder: "@lang('select')",
-    });
+    // $('select').select2({
+    //   dir: '{{ LaravelLocalization::getCurrentLocaleDirection() }}',
+    // placeholder: "@lang('select')",
+    //});
 </script>
 
 @yield('scripts')
@@ -544,9 +544,6 @@
                 $('#full-modal-stem').modal('hide');
                 table.draw()
                 $('#add_model_form').trigger("reset");
-
-
-
 
                 $('#model-excel').modal('hide');
 

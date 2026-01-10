@@ -12,7 +12,10 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/reverb": "^1.0",
+<<<<<<< HEAD
         "laravel/sanctum": "^4.0",
+=======
+>>>>>>> 278d07bbeded43eed01bbcb0228afc9d136270ea
         "laravel/tinker": "^2.10.1",
         "mcamara/laravel-localization": "^2.3",
         "spatie/laravel-permission": "^6.16",

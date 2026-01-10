@@ -5,9 +5,6 @@ use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-
-});
 
 Route::get('login', [\App\Http\Controllers\Web\Auth\AuthController::class, 'index'])->name('user.login');
 Route::post('login', [\App\Http\Controllers\Web\Auth\AuthController::class, 'login'])->name('user.login');

@@ -60,6 +60,7 @@ Route::group(
                 Route::put('/updateStatus/{status}/{uuid}', 'updateStatus')->name('updateStatus');
             });
 
+
             Route::middleware('permission:city')->controller(\App\Http\Controllers\Admin\Delivery\DeliveryController::class)->prefix('deliveries')->name('deliveries.')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::post('/store', 'store')->name('store');
@@ -68,6 +69,7 @@ Route::group(
                 Route::get('/indexTable', 'indexTable')->name('indexTable');
                 Route::put('/updateStatus/{status}/{uuid}', 'updateStatus')->name('updateStatus');
             });
+
             Route::middleware('permission:category')->controller(\App\Http\Controllers\Admin\Category\CategoryController::class)->prefix('categories')->name('categories.')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::post('/store', 'store')->name('store');
@@ -99,11 +101,40 @@ Route::group(
                 Route::get('features', [\App\Http\Controllers\Admin\Content\ContentController::class, 'getFeaturesSection'])->name('getFeaturesSection');
                 Route::post('features', [\App\Http\Controllers\Admin\Content\ContentController::class, 'postFeaturesSection'])->name('postFeaturesSection');
 
+
                 Route::get('contact', [\App\Http\Controllers\Admin\Content\ContentController::class, 'getContactSection'])->name('getContactSection');
                 Route::post('contact', [\App\Http\Controllers\Admin\Content\ContentController::class, 'posContactSection'])->name('posContactSection');
 
             });
+            Route::prefix('blog')
+                ->name('blog.')
+                ->group(function () {
+                    Route::prefix('category')
+                        ->controller(\App\Http\Controllers\Admin\Blog\BlogCategoryController::class)
+                        ->group(function () {
+                            Route::get('/', 'index')->name('category.index');
+                            Route::post('/store', 'store')->name('category.store');
+                            Route::post('/update', 'update')->name('category.update');
+                            Route::delete('/{uuid}', 'destroy')->name('category.delete');
+                            Route::get('/indexTable', 'indexTable')->name('category.indexTable');
+                            Route::put('/updateStatus/{status}/{uuid}', 'updateStatus')->name('category.updateStatus');
+                        });
+                    Route::prefix('article')
+                        ->controller(\App\Http\Controllers\Admin\Blog\BlogArticleController::class)
+                        ->group(function () {
+                            Route::get('/', 'index')->name('article.index');
+                            Route::post('/store', 'store')->name('article.store');
+                            Route::post('/update', 'update')->name('article.update');
+                            Route::delete('/{uuid}', 'destroy')->name('article.delete');
+                            Route::get('/indexTable', 'indexTable')->name('article.indexTable');
+                            Route::put('/updateStatus/{status}/{id}', 'updateStatus')->name('article.updateStatus');
+                        });
+                });
+
         });
 
 
-    });
+
+    }
+);
+
