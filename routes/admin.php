@@ -92,22 +92,29 @@ Route::group(
             });
 
             Route::prefix('blog')
-            ->name('blog.')
-            ->group(function () {
-                Route::prefix('category')
-                    ->controller(\App\Http\Controllers\Admin\Blog\BlogCategoryController::class)
-                    ->group(function () {
-                        Route::get('/', 'index')->name('category.index');
-                        Route::post('/store', 'store')->name('category.store');
-                        Route::post('/update', 'update')->name('category.update');
-                        Route::delete('/{uuid}', 'destroy')->name('category.delete');
-                        Route::get('/indexTable', 'indexTable')->name('category.indexTable');
-                        Route::put('/updateStatus/{status}/{uuid}', 'updateStatus')->name('category.updateStatus');
-                    });
-            });
+                ->name('blog.')
+                ->group(function () {
+                    Route::prefix('category')
+                        ->controller(\App\Http\Controllers\Admin\Blog\BlogCategoryController::class)
+                        ->group(function () {
+                            Route::get('/', 'index')->name('category.index');
+                            Route::post('/store', 'store')->name('category.store');
+                            Route::post('/update', 'update')->name('category.update');
+                            Route::delete('/{uuid}', 'destroy')->name('category.delete');
+                            Route::get('/indexTable', 'indexTable')->name('category.indexTable');
+                            Route::put('/updateStatus/{status}/{uuid}', 'updateStatus')->name('category.updateStatus');
+                        });
+                    Route::prefix('article')
+                        ->controller(\App\Http\Controllers\Admin\Blog\BlogArticleController::class)
+                        ->group(function () {
+                            Route::get('/', 'index')->name('article.index');
+                            Route::post('/store', 'store')->name('article.store');
+                            Route::post('/update', 'update')->name('article.update');
+                            Route::delete('/{uuid}', 'destroy')->name('article.delete');
+                            Route::get('/indexTable', 'indexTable')->name('article.indexTable');
+                            Route::put('/updateStatus/{status}/{id}', 'updateStatus')->name('article.updateStatus');
+                        });
+                });
         });
-
-
-
     }
 );
