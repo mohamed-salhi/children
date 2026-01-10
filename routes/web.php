@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
 
 });
-Route::get('/name', function () {
-    broadcast(new NewMessage("Hello from Laravel Reverb!"));
-    return view('welcome');
-})->name('name');
+
 Route::get('login', [\App\Http\Controllers\Web\Auth\AuthController::class, 'index'])->name('user.login');
 Route::post('login', [\App\Http\Controllers\Web\Auth\AuthController::class, 'login'])->name('user.login');
 Broadcast::routes(['middleware' => ['auth']]);
