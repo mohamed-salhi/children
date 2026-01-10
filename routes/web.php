@@ -3,9 +3,14 @@
 use App\Events\NewMessage;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
-
+Route::get('/test-mail', function () {
+    Mail::raw('Test email', function ($m) {
+        $m->to('your@gmail.com')->subject('Test');
+    });
+});
 Route::get('login', [\App\Http\Controllers\Web\Auth\AuthController::class, 'index'])->name('user.login');
 Route::post('login', [\App\Http\Controllers\Web\Auth\AuthController::class, 'login'])->name('user.login');
 Broadcast::routes(['middleware' => ['auth']]);

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\User;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -65,6 +67,45 @@ class AuthController extends Controller
         $user->setAttribute('token', $token);
 
         return  mainResponse(true,__('ok'), compact('user'), [], 200);
+    }
+
+    public function sendResetLink(Request $request)
+    {
+
+        $request->validate(['email' => 'required|email']);
+        ResetPassword::createUrlUsing(function ($user, string $token) {
+            return "/reset-password?token=$token&email={$user->email}";
+        });
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+        return $status === Password::RESET_LINK_SENT
+            ? mainResponse(true, __('Reset link sent successfully'), [], [], 200)
+            : mainResponse(false, __('Unable to send reset link'), [], [], 400);
+
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email','password','password_confirmation','token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->save();
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? mainResponse(true, __('Password reset successfully'), [], [], 200)
+            : mainResponse(false, __('Invalid token'), [], [], 400);
     }
 
 
