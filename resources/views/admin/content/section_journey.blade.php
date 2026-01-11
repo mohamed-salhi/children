@@ -108,18 +108,6 @@
                                         <h5 class="text-muted mb-0">@lang('Photos')</h5>
                                         <small class="text-muted">@lang('Upload 4 images (each field is separate)')</small>
                                     </div>
-                                    @php
-                                        use Illuminate\Support\Facades\Storage;
-
-                                        $journeyImages = \App\Models\Upload::where(
-                                            'imageable_type',
-                                            \App\Models\SectionJourney::class,
-                                        )
-                                            ->where('imageable_id', 1)
-                                            ->where('type', \App\Models\Upload::IMAGE)
-                                            ->get()
-                                            ->keyBy('name'); // image_1 .. image_4
-                                    @endphp
 
 
 
@@ -137,7 +125,7 @@
                                                         </label>
 
                                                         <img id="preview_img_{{ $i }}"
-                                                             src="{{ isset($journeyImages[$key]) ? Storage::url($journeyImages[$key]->filename) : asset('images/placeholder.png') }}"
+                                                             src="{{ $journey->{'image_'.$i} }}"
                                                              class="img-thumbnail mb-1"
                                                              style="width:100%; height:180px; object-fit:cover;">
 
@@ -288,21 +276,6 @@
         });
 
         // ✅ Image Uploader (كما هو)
-        $('.input-images').imageUploader({
-            preloaded: [
-                    @foreach ($journey->attachments as $item)
-                {
-                    id: "{{ $item['uuid'] }}",
-                    src: "{{ $item['attachment'] }}"
-                },
-                @endforeach
-            ],
-            imagesInputName: 'images[]',
-            preloadedInputName: 'delete_images',
-            maxSize: 2 * 1024 * 1024,
-            maxFiles: 20,
-            with: 100
-        });
     </script>
     <script>
         $(document).on('change', '.img-input', function () {

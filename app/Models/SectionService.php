@@ -23,7 +23,7 @@ class SectionService extends Model
 
     public function items()
     {
-        return $this->hasMany(SectionServiceItems::class, 'section_service_id');
+        return $this->hasMany(SectionServiceItems::class, 'section_service_id')->orderBy('id');
     }
 
 

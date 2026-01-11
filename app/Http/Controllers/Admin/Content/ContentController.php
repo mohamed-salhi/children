@@ -69,23 +69,21 @@ class ContentController extends Controller
         /* =========================
      * Validation
      * ========================= */
-        $rules = [
-            'image_1' => 'nullable|mimes:jpeg,jpg,png',
-            'image_2' => 'nullable|mimes:jpeg,jpg,png',
-            'image_3' => 'nullable|mimes:jpeg,jpg,png',
-            'image_4' => 'nullable|mimes:jpeg,jpg,png',
-        ];
 
+        $rules = [];
+        for ($i = 1; $i <= 4; $i++) {
+            $rules["image_$i"] = 'nullable|mimes:jpeg,jpg,png';
+        }
         foreach (locales() as $key => $language) {
 
-            $rules['title_' . $key]   = 'required|string|max:45';
+            $rules['title_' . $key] = 'required|string|max:45';
             $rules['details_' . $key] = 'required|string|max:45';
         }
 
         $request->validate($rules);
         $data = [];
         foreach (locales() as $key => $language) {
-            $data['title'][$key]   = $request->get('title_' . $key);
+            $data['title'][$key] = $request->get('title_' . $key);
             $data['details'][$key] = $request->get('details_' . $key);
         }
 
@@ -106,67 +104,14 @@ class ContentController extends Controller
                 ]);
             }
         }
-        $existingImages = Upload::where('imageable_type', SectionJourney::class)
-            ->where('imageable_id', $journey->id)
-            ->where('type', Upload::IMAGE) // 1 = صورة
-            ->orderBy('uuid')              // ✅ الترتيب الصحيح
-            ->get()
-            ->values();
-
-        // ================= Images (using name field) =================
-
-        foreach (['image_1', 'image_2', 'image_3', 'image_4'] as $field) {
-
-            if ($request->hasFile($field)) {
-
-                // حذف القديمة بنفس الاسم
-                $old = Upload::where('imageable_type', SectionJourney::class)
-                    ->where('imageable_id', $journey->id)
-                    ->where('type', Upload::IMAGE)
-                    ->where('name', $field)
-                    ->first();
-
-                if ($old) {
-                    File::delete(public_path(SectionJourney::PATH_IMAGE . $old->filename));
-                    $old->delete();
-                }
-
-                // ✅ uuids قبل الرفع
-                $before = Upload::where('imageable_type', SectionJourney::class)
-                    ->where('imageable_id', $journey->id)
-                    ->where('type', Upload::IMAGE)
-                    ->pluck('uuid')
-                    ->toArray();
-
-                // رفع الصورة
-                UploadImage(
-                    $request->file($field),
-                    SectionJourney::PATH_IMAGE,
-                    SectionJourney::class,
-                    $journey->id,
-                    false,
-                    null,
-                    Upload::IMAGE
+        $imagesMap = [1 => 'imageOneJourney', 2 => 'imageTowJourney', 3 => 'imageThreeJourney', 4 => 'imageFourJourney',
+        ];
+        foreach ($imagesMap as $i => $column) {
+            if ($request->has("image_$i")) {
+                UploadImage($request->file("image_$i"), SectionJourney::PATH_IMAGE, SectionJourney::class, $journey->id, true, null, Upload::IMAGE, $column
                 );
-
-                // ✅ uuids بعد الرفع
-                $after = Upload::where('imageable_type', SectionJourney::class)
-                    ->where('imageable_id', $journey->id)
-                    ->where('type', Upload::IMAGE)
-                    ->pluck('uuid')
-                    ->toArray();
-
-                // ✅ uuid الجديد بالضبط
-                $newUuidArr = array_values(array_diff($after, $before));
-
-                if (!empty($newUuidArr)) {
-                    Upload::where('uuid', $newUuidArr[0])->update(['name' => $field]);
-                }
             }
         }
-
-
-
 
         return response()->json([
             'message' => 'تم تحديث الإعدادات بنجاح'
@@ -209,7 +154,7 @@ class ContentController extends Controller
 
 
         for ($i = 0; $i < $count; $i++) {
-            $item =   SectionFeaturesItems::create([
+            $item = SectionFeaturesItems::create([
                 'section_feature_id' => 1,
                 'title' => [
                     'en' => [$request->title_item_en[$i]],
@@ -219,7 +164,7 @@ class ContentController extends Controller
                     'en' => [$request->details_item_en[$i]],
                     'ar' => [$request->details_item_ar[$i]],
                 ],
-                'icon' =>$request->icon_item[$i]
+                'icon' => $request->icon_item[$i]
             ]);
         }
 
@@ -231,14 +176,13 @@ class ContentController extends Controller
     public function getServicesSection()
     {
 
-        $services= SectionService::query()->with('items')->first();
+        $services = SectionService::query()->with('items')->first();
 
         return view('admin.content.section_services', compact('services'));
     }
 
     public function postServicesSection(Request $request)
     {
-
         foreach (locales() as $key => $language) {
             $rules['title_' . $key] = 'required|string|max:45';
         }
@@ -259,28 +203,27 @@ class ContentController extends Controller
             UploadImage($request->image, SectionService::PATH_IMAGE, SectionService::class, $service->id, true, null, Upload::IMAGE);
         }
 
-        $service->items()->delete();
-        $count = count($request->title_item_en);
+        $count = count($request->id);
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 1; $i <= $count; $i++) {
 
-            $item=   SectionServiceItems::create([
-                'section_service_id' => 1,
-                'title' => [
-                    'en' => [$request->title_item_en[$i]],
-                    'ar' => [$request->title_item_ar[$i]],
-                ],
-                'details' => [
-                    'en' => [$request->details_item_en[$i]],
-                    'ar' => [$request->details_item_ar[$i]],
-                ],
-                  'button' => [
-                'en' => [$request->button_item_en[$i]],
-                'ar' => [$request->button_item_ar[$i]],
-            ]
-            ]);
-            if (@$request->image_item[$i]) {
-                UploadImage($request->image_item[$i], SectionFeaturesItems::PATH_IMAGE, SectionServiceItems::class, $item->id, true, null, Upload::IMAGE);
+            $item = SectionServiceItems::query()->where('id',$i)->update(
+                [
+                    'title' => [
+                        'en' => [$request->title_item_en[$i]],
+                        'ar' => [$request->title_item_ar[$i]],
+                    ],
+                    'details' => [
+                        'en' => [$request->details_item_en[$i]],
+                        'ar' => [$request->details_item_ar[$i]],
+                    ],
+                    'button' => [
+                        'en' => [$request->button_item_en[$i]],
+                        'ar' => [$request->button_item_ar[$i]],
+                    ]]
+            );
+            if ($request->has("image_item$i")) {
+                UploadImage($request->file("image_item$i"), SectionFeaturesItems::PATH_IMAGE, SectionServiceItems::class, $item->id, true, @$item->imageServiceitem->uuid, Upload::IMAGE,'image_'.$i);
             }
 
         }
