@@ -1,11 +1,15 @@
 <?php
 
-use App\Http\Controllers\Admin\PaymentGateway\ProcessPaymentController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Places\CityController;
 use App\Http\Controllers\Admin\Places\CountryController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Blog\BlogArticleController;
+use App\Http\Controllers\Admin\Blog\BlogCategoryController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\Admin\PaymentGateway\ProcessPaymentController;
 
+Route::post('/admin/ck-upload', [BlogArticleController::class, 'upload'])
+    ->name('admin.ck.upload');
 
 Route::group(
     [
@@ -138,5 +142,8 @@ Route::group(
 
 
     }
+
 );
+
+
 
