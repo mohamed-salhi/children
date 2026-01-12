@@ -54,8 +54,8 @@ class AdminController extends Controller
         ]);
         $data['password'] = Hash::make($request->password);
 
-        $admin = Admin::create($data);
-        $admin->assignRole($request->input('role'));
+        $admin = Admin::query()->create($data);
+        $admin->assignRole($request->input('roles'));
         return response()->json([
             'item_edited'
         ]);
