@@ -1,12 +1,12 @@
 <div style="background-color: #dcf1fc" class="main-menu menu-fixed menu-accordion menu-shadow menu-dark"
-    data-scroll-to-active="true">
+     data-scroll-to-active="true">
     <div class="navbar-header" style="height: unset !important;">
         <ul class="nav navbar-nav flex-row">
             <li class="nav-item mr-auto" style="margin: 0 auto;">
                 <a class="navbar-brand" href="#">
                     <span class="brand-logo"><img alt="logo"
-                            src="{{ asset('dashboard/app-assets/images/logo/Logo.png') }}"
-                            style="max-width: 100% !important;max-height: 100%  !important; margin: 0 auto; display: flex;" />
+                                                  src="{{ asset('dashboard/app-assets/images/logo/Logo.png') }}"
+                                                  style="max-width: 100% !important;max-height: 100%  !important; margin: 0 auto; display: flex;" />
                     </span>
 
                 </a>
@@ -33,8 +33,8 @@
                 <li class="nav-item has-sub  " style="">
                     <a class="d-flex align-items-center" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-pie-chart">
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round" class="feather feather-pie-chart">
                             <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
                             <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
                         </svg>
@@ -59,7 +59,7 @@
                 <li class="nav-item has-sub  " style="">
                     <a class="d-flex align-items-center" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-box2-fill" viewBox="0 0 16 16">
+                             class="bi bi-box2-fill" viewBox="0 0 16 16">
                             <path
                                 d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5ZM15 4.667V5H1v-.333L1.5 4h6V1h1v3h6l.5.667Z" />
                         </svg>
@@ -90,6 +90,12 @@
                                     class="menu-title text-truncate">@lang('Section Our Features')</span>
                             </a>
                         </li>
+                        <li class="nav-item {{ request()->routeIs('content.getContactSection') ? 'active' : '' }} ">
+                            <a class="d-flex align-items-center" href="{{ route('content.getContactSection') }}">
+                                <i data-feather="file-text"></i><span
+                                    class="menu-title text-truncate">@lang('Section Contact Us')</span>
+                            </a>
+                        </li>
                     </ul>
 
                 </li>
@@ -101,7 +107,7 @@
                         <span class="menu-title text-truncate" data-i18n="Charts">@lang('users')</span></a>
                 </li>
             @endcan
-            @can(Auth::user('admin')->can('category'))
+            @can('category')
                 <li class="nav-item {{ request()->routeIs('categories.index') ? 'active' : '' }} ">
                     <a class="d-flex align-items-center" href="{{ route('categories.index') }}">
                         <i data-feather="file-text"></i><span class="menu-title text-truncate">@lang('categories')</span>
@@ -112,7 +118,7 @@
                 <li class="nav-item has-sub  " style="">
                     <a class="d-flex align-items-center" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-box2-fill" viewBox="0 0 16 16">
+                             class="bi bi-box2-fill" viewBox="0 0 16 16">
                             <path
                                 d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5ZM15 4.667V5H1v-.333L1.5 4h6V1h1v3h6l.5.667Z" />
                         </svg>
@@ -152,7 +158,7 @@
                     @php $count= \App\Models\Contact::query()->where('view',1)->count() @endphp
                     <a class="d-flex align-items-center" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-messenger" viewBox="0 0 16 16">
+                             class="bi bi-messenger" viewBox="0 0 16 16">
                             <path
                                 d="M0 7.76C0 3.301 3.493 0 8 0s8 3.301 8 7.76-3.493 7.76-8 7.76c-.81 0-1.586-.107-2.316-.307a.639.639 0 0 0-.427.03l-1.588.702a.64.64 0 0 1-.898-.566l-.044-1.423a.639.639 0 0 0-.215-.456C.956 12.108 0 10.092 0 7.76zm5.546-1.459-2.35 3.728c-.225.358.214.761.551.506l2.525-1.916a.48.48 0 0 1 .578-.002l1.869 1.402a1.2 1.2 0 0 0 1.735-.32l2.35-3.728c.226-.358-.214-.761-.551-.506L9.728 7.381a.48.48 0 0 1-.578.002L7.281 5.98a1.2 1.2 0 0 0-1.735.32z" />
                         </svg>

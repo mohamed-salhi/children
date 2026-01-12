@@ -268,6 +268,7 @@ function fcmNotification($token, $id, $title, $content, $type, $reference_id, $r
     return $result;
 }
 
+
 function generateLocalizedSlugs(array $names, $separator = '-', $modelClass = null): array
 {
     $slugs = [];
@@ -297,64 +298,6 @@ function generateLocalizedSlugs(array $names, $separator = '-', $modelClass = nu
     return $slugs;
 }
 
-//function notfication($receiver_uuid, $sender, $type = null, $msg = null, $name = null, $request = null)
-//{
-//    if ($msg) {
-//        $content = [
-//            'ar' => $name . __($msg, [], 'ar'),
-//            'en' => $name . $msg
-//        ];
-//    } else {
-//        $content = [
-//            'ar' => $request->get('content_ar'),
-//            'en' => $request->get('content_en')
-//        ];
-//    }
-//
-//    $ios_tokens = FcmToken::query()
-//        ->whereIn("user_uuid", $receiver_uuid)
-//        ->where('fcm_device', 'ios')
-//        ->pluck('fcm_token')->toArray();
-//    $android_tokens = FcmToken::query()
-//        ->whereIn("user_uuid", $receiver_uuid)
-//        ->where('fcm_device', 'android')
-//        ->pluck('fcm_token')->toArray();
-//
-//    $icon = null;
-//    if ($sender != 'admin') {
-//        $icon = $sender->image;
-//        $sender = $sender->uuid;
-//
-//    }
-//    $title = null;
-//    if ($request) {
-//        $title = ['en' => $request->get('title_en'), 'ar' => $request->get('title_en')];
-//    }
-//
-//    $notification = Notification::query()->create([
-//        'sender' => $sender,
-//        'icon' => $icon,
-//        'content' => $content,
-//        'type' => $type,
-//        'title' => $title
-//    ]);
-//
-//    foreach ($receiver_uuid as $uuid) {
-//        NotificationUser::query()->create([
-//            'receiver_uuid' => $uuid,
-//            'notification_uuid' => $notification->uuid
-//        ]);
-//    }
-//    if ($ios_tokens) {
-//        sendFCM($msg, $ios_tokens, "ios");
-//    }
-//    if ($android_tokens) {
-//        sendFCM($msg, $android_tokens, "android");
-//    }
-//}
 
 ?>
-
-
-
 

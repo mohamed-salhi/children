@@ -40,11 +40,11 @@
                             {{-- ✅ Body في مكانه الصحيح --}}
                             <div class="card-body">
                                 <form action="{{ route('content.postHeroSection') }}" method="POST" id="add-mode-form"
-                                    class="add-mode-form" enctype="multipart/form-data">
+                                      class="add-mode-form" enctype="multipart/form-data">
                                     @csrf
 
                                     <input type="hidden" name="uuid" id="uuid" class="form-control"
-                                        value="{{ optional($hero)->uuid ?? '' }}" />
+                                           value="{{ optional($hero)->uuid ?? '' }}" />
 
                                     {{-- ===== Title ===== --}}
                                     <div class="mb-2">
@@ -62,9 +62,9 @@
                                                             class="badge badge-light text-dark ml-1">{{ $value }}</span>
                                                     </label>
                                                     <input type="text" class="form-control"
-                                                        placeholder="@lang('title') {{ $value }}"
-                                                        name="title_{{ $key }}"
-                                                        value="{{ optional($hero)->getTranslation('title', $key) ?? '' }}">
+                                                           placeholder="@lang('title') {{ $value }}"
+                                                           name="title_{{ $key }}"
+                                                           value="{{ optional($hero)->getTranslation('title', $key) ?? '' }}">
                                                     <div class="invalid-feedback"></div>
                                                 </div>
                                             </div>
@@ -89,9 +89,9 @@
                                                             class="badge badge-light text-dark ml-1">{{ $value }}</span>
                                                     </label>
                                                     <input type="text" class="form-control"
-                                                        placeholder="@lang('details') {{ $value }}"
-                                                        name="details_{{ $key }}"
-                                                        value="{{ optional($hero)->getTranslation('details', $key) ?? '' }}">
+                                                           placeholder="@lang('details') {{ $value }}"
+                                                           name="details_{{ $key }}"
+                                                           value="{{ optional($hero)->getTranslation('details', $key) ?? '' }}">
                                                     <div class="invalid-feedback"></div>
                                                 </div>
                                             </div>
@@ -117,9 +117,9 @@
 
                                                     </label>
                                                     <input type="text" class="form-control"
-                                                        placeholder="@lang('button') {{ $value }}"
-                                                        name="button_{{ $key }}"
-                                                        value="{{ optional($hero)->getTranslation('button', $key) ?? '' }}">
+                                                           placeholder="@lang('button') {{ $value }}"
+                                                           name="button_{{ $key }}"
+                                                           value="{{ optional($hero)->getTranslation('button', $key) ?? '' }}">
                                                     <div class="invalid-feedback"></div>
                                                 </div>
                                             </div>
@@ -135,17 +135,17 @@
                                         <div class="d-flex align-items-start">
                                             <div class="mr-3">
                                                 <img id="edit_src_image"
-                                                    src="{{ optional($hero)->image ?? asset('images/placeholder.png') }}"
-                                                    alt="" class="img-thumbnail"
-                                                    style="width: 220px; height: 160px; object-fit: cover;">
+                                                     src="{{ optional($hero)->image ?? asset('images/placeholder.png') }}"
+                                                     alt="" class="img-thumbnail"
+                                                     style="width: 220px; height: 160px; object-fit: cover;">
                                             </div>
 
                                             <div class="flex-grow-1">
                                                 <div class="custom-file">
                                                     <input type="file" name="image" class="custom-file-input"
-                                                        id="heroImage">
+                                                           id="heroImage">
                                                     <label class="custom-file-label"
-                                                        for="heroImage">@lang('select_image')</label>
+                                                           for="heroImage">@lang('select_image')</label>
                                                 </div>
                                                 <div class="invalid-feedback" style="display:block;"></div>
                                                 <small class="text-muted d-block mt-1">@lang('select_image')</small>

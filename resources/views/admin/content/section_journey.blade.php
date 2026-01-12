@@ -40,7 +40,7 @@
 
                             <div class="card-body">
                                 <form action="{{ route('content.postJourneySection') }}" method="POST" id="add-mode-form"
-                                    class="add-mode-form" enctype="multipart/form-data">
+                                      class="add-mode-form" enctype="multipart/form-data">
                                     @csrf
 
                                     {{-- ===== Title ===== --}}
@@ -59,9 +59,9 @@
                                                             class="badge badge-light text-dark ml-1">{{ $value }}</span>
                                                     </label>
                                                     <input type="text" class="form-control"
-                                                        placeholder="@lang('title') {{ $value }}"
-                                                        name="title_{{ $key }}"
-                                                        value="{{ @$journey->getTranslation('title', $key) }}">
+                                                           placeholder="@lang('title') {{ $value }}"
+                                                           name="title_{{ $key }}"
+                                                           value="{{ @$journey->getTranslation('title', $key) }}">
                                                     <div class="invalid-feedback"></div>
                                                 </div>
                                             </div>
@@ -86,9 +86,9 @@
                                                             class="badge badge-light text-dark ml-1">{{ $value }}</span>
                                                     </label>
                                                     <input type="text" class="form-control"
-                                                        placeholder="@lang('details') {{ $value }}"
-                                                        name="details_{{ $key }}"
-                                                        value="{{ @$journey->getTranslation('details', $key) }}">
+                                                           placeholder="@lang('details') {{ $value }}"
+                                                           name="details_{{ $key }}"
+                                                           value="{{ @$journey->getTranslation('details', $key) }}">
                                                     <div class="invalid-feedback"></div>
                                                 </div>
                                             </div>
@@ -108,18 +108,6 @@
                                         <h5 class="text-muted mb-0">@lang('Photos')</h5>
                                         <small class="text-muted">@lang('Upload 4 images (each field is separate)')</small>
                                     </div>
-                                    @php
-                                        use Illuminate\Support\Facades\Storage;
-
-                                        $journeyImages = \App\Models\Upload::where(
-                                            'imageable_type',
-                                            \App\Models\SectionJourney::class,
-                                        )
-                                            ->where('imageable_id', 1)
-                                            ->where('type', \App\Models\Upload::IMAGE)
-                                            ->get()
-                                            ->keyBy('name'); // image_1 .. image_4
-                                    @endphp
 
 
 
@@ -137,15 +125,15 @@
                                                         </label>
 
                                                         <img id="preview_img_{{ $i }}"
-                                                            src="{{ isset($journeyImages[$key]) ? Storage::url($journeyImages[$key]->filename) : asset('images/placeholder.png') }}"
-                                                            class="img-thumbnail mb-1"
-                                                            style="width:100%; height:180px; object-fit:cover;">
+                                                             src="{{ $journey->{'image_'.$i} }}"
+                                                             class="img-thumbnail mb-1"
+                                                             style="width:100%; height:180px; object-fit:cover;">
 
                                                         <div class="custom-file">
                                                             <input type="file" name="{{ $key }}"
-                                                                class="custom-file-input img-input"
-                                                                id="img_{{ $i }}" accept="image/*"
-                                                                data-preview="preview_img_{{ $i }}">
+                                                                   class="custom-file-input img-input"
+                                                                   id="img_{{ $i }}" accept="image/*"
+                                                                   data-preview="preview_img_{{ $i }}">
 
                                                             <label class="custom-file-label" for="img_{{ $i }}">
                                                                 @lang('select_image')
@@ -189,9 +177,9 @@
                                                                             class="badge badge-light text-dark ml-1">{{ $value }}</span>
                                                                     </label>
                                                                     <input type="text" class="form-control"
-                                                                        placeholder="@lang('items') {{ $value }}"
-                                                                        name="items_{{ $key }}[]"
-                                                                        value="{{ $item->getTranslation('item', $key)[0] ?? '' }}">
+                                                                           placeholder="@lang('items') {{ $value }}"
+                                                                           name="items_{{ $key }}[]"
+                                                                           value="{{ $item->getTranslation('item', $key)[0] ?? '' }}">
                                                                     <div class="invalid-feedback"></div>
                                                                 </div>
                                                             </div>
@@ -201,7 +189,7 @@
 
                                                 <div class="col-md-1 d-flex">
                                                     <a class="btn btn-danger btn-sm w-100 remove_row"
-                                                        title="@lang('delete')">
+                                                       title="@lang('delete')">
                                                         <i class="fas fa-times"></i>
                                                     </a>
                                                 </div>
@@ -254,11 +242,11 @@
                     <div class="col-md-11">
                         <div class="row">
                             @foreach (locales() as $key => $value)
-                                <div class="col-12 col-md-6">
-                                    <div class="form-group">
-                                        <label class="font-weight-bold">
-                                            @lang('items')
-                                            <span class="badge badge-light text-dark ml-1">{{ $value }}</span>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label class="font-weight-bold">
+@lang('items')
+            <span class="badge badge-light text-dark ml-1">{{ $value }}</span>
                                         </label>
                                         <input type="text" class="form-control"
                                                placeholder="@lang('items') {{ $value }}"
@@ -267,11 +255,11 @@
                                     </div>
                                 </div>
                             @endforeach
-                        </div>
-                    </div>
+            </div>
+        </div>
 
-                    <div class="col-md-1 d-flex">
-                        <a class="btn btn-danger btn-sm w-100 remove_row" title="@lang('delete')">
+        <div class="col-md-1 d-flex">
+            <a class="btn btn-danger btn-sm w-100 remove_row" title="@lang('delete')">
                             <i class="fas fa-times"></i>
                         </a>
                     </div>
@@ -288,38 +276,23 @@
         });
 
         // ✅ Image Uploader (كما هو)
-        $('.input-images').imageUploader({
-            preloaded: [
-                @foreach ($journey->attachments as $item)
-                    {
-                        id: "{{ $item['uuid'] }}",
-                        src: "{{ $item['attachment'] }}"
-                    },
-                @endforeach
-            ],
-            imagesInputName: 'images[]',
-            preloadedInputName: 'delete_images',
-            maxSize: 2 * 1024 * 1024,
-            maxFiles: 20,
-            with: 100
+    </script>
+    <script>
+        $(document).on('change', '.img-input', function () {
+            const file = this.files && this.files[0] ? this.files[0] : null;
+
+            // label
+            const fileName = file ? file.name : "@lang('select_image')";
+            $(this).next('.custom-file-label').html(fileName);
+
+            // preview
+            const previewId = $(this).data('preview');
+            if (file && previewId) {
+                const reader = new FileReader();
+                reader.onload = e => $('#' + previewId).attr('src', e.target.result);
+                reader.readAsDataURL(file);
+            }
         });
     </script>
-   <script>
-    $(document).on('change', '.img-input', function () {
-        const file = this.files && this.files[0] ? this.files[0] : null;
-
-        // label
-        const fileName = file ? file.name : "@lang('select_image')";
-        $(this).next('.custom-file-label').html(fileName);
-
-        // preview
-        const previewId = $(this).data('preview');
-        if (file && previewId) {
-            const reader = new FileReader();
-            reader.onload = e => $('#' + previewId).attr('src', e.target.result);
-            reader.readAsDataURL(file);
-        }
-    });
-</script>
 
 @endsection

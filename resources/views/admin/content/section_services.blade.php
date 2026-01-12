@@ -133,22 +133,22 @@
 
                                                                     @endforeach
 
-                                                                        @foreach (locales() as $key => $value)
-                                                                            <div class="col-12">
-                                                                                <div class="form-group">
-                                                                                    <label
-                                                                                        for="button_{{ $key }}">@lang('button') @lang($value)</label>
-                                                                                    <input type="text" class="form-control"
-                                                                                           placeholder="@lang('button') @lang($value)"
-                                                                                           name="button_item_{{ $key }}[]"
-                                                                                           value="{{ $item->getTranslation('button', $key)[0] ?? '' }}"
+                                                                    @foreach (locales() as $key => $value)
+                                                                        <div class="col-12">
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="button_{{ $key }}">@lang('button') @lang($value)</label>
+                                                                                <input type="text" class="form-control"
+                                                                                       placeholder="@lang('button') @lang($value)"
+                                                                                       name="button_item_{{ $key }}[]"
+                                                                                       value="{{ $item->getTranslation('button', $key)[0] ?? '' }}"
 
-                                                                                    >
-                                                                                    <div class="invalid-feedback"></div>
-                                                                                </div>
+                                                                                >
+                                                                                <div class="invalid-feedback"></div>
                                                                             </div>
+                                                                        </div>
 
-                                                                        @endforeach
+                                                                    @endforeach
                                                                     <div class="col-12">
                                                                         <label for="icon">@lang('flag')</label>
                                                                         <div>

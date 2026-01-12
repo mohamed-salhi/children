@@ -43,6 +43,7 @@ Route::group(
                 Route::delete('/{uuid}', 'destroy')->name('delete');
                 Route::get('/indexTable', 'indexTable')->name('indexTable');
                 Route::put('/updateStatus/{status}/{uuid}', 'updateStatus')->name('updateStatus');
+
             });
 
             Route::middleware('permission:admin')->controller(\App\Http\Controllers\Admin\AdminController::class)->name('managers.')->prefix('managers')->group(function () {
@@ -55,6 +56,16 @@ Route::group(
                 Route::get('/edit/{id}', 'edit')->name('edit');
             });
             Route::middleware('permission:product')->controller(\App\Http\Controllers\Admin\Product\ProductController::class)->prefix('products')->name('products.')->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/store', 'store')->name('store');
+                Route::post('/update', 'update')->name('update');
+                Route::delete('/{uuid}', 'destroy')->name('delete');
+                Route::get('/indexTable', 'indexTable')->name('indexTable');
+                Route::put('/updateStatus/{status}/{uuid}', 'updateStatus')->name('updateStatus');
+            });
+
+
+            Route::middleware('permission:city')->controller(\App\Http\Controllers\Admin\Delivery\DeliveryController::class)->prefix('deliveries')->name('deliveries.')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::post('/store', 'store')->name('store');
                 Route::post('/update', 'update')->name('update');
@@ -93,8 +104,12 @@ Route::group(
 
                 Route::get('features', [\App\Http\Controllers\Admin\Content\ContentController::class, 'getFeaturesSection'])->name('getFeaturesSection');
                 Route::post('features', [\App\Http\Controllers\Admin\Content\ContentController::class, 'postFeaturesSection'])->name('postFeaturesSection');
-            });
 
+
+                Route::get('contact', [\App\Http\Controllers\Admin\Content\ContentController::class, 'getContactSection'])->name('getContactSection');
+                Route::post('contact', [\App\Http\Controllers\Admin\Content\ContentController::class, 'posContactSection'])->name('posContactSection');
+
+            });
             Route::prefix('blog')
                 ->name('blog.')
                 ->group(function () {
@@ -119,7 +134,11 @@ Route::group(
                             Route::put('/updateStatus/{status}/{id}', 'updateStatus')->name('article.updateStatus');
                         });
                 });
+
         });
+
+
+
     }
 
 );
