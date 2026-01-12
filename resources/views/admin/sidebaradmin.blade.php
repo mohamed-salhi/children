@@ -55,7 +55,7 @@
                     </ul>
                 </li>
             @endcan
-            @can('content')
+            @can('content-management')
                 <li class="nav-item has-sub  " style="">
                     <a class="d-flex align-items-center" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

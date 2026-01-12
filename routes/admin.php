@@ -87,7 +87,7 @@ Route::group(
                 Route::get('/texts', 'textsContent')->name('texts');
                 Route::post('/texts', 'postTextsContent')->name('texts.post');
             });
-            Route::middleware('permission:setting')->prefix('content/')->name('content.')->group(function () {
+            Route::middleware('permission:content-management')->prefix('content/')->name('content.')->group(function () {
                 Route::get('hero', [\App\Http\Controllers\Admin\Content\ContentController::class, 'getHeroSection'])->name('getHeroSection');
                 Route::post('hero', [\App\Http\Controllers\Admin\Content\ContentController::class, 'postHeroSection'])->name('postHeroSection');
 
@@ -106,6 +106,8 @@ Route::group(
                 Route::post('contact', [\App\Http\Controllers\Admin\Content\ContentController::class, 'posContactSection'])->name('posContactSection');
 
             });
+
+
             Route::prefix('blog')
                 ->name('blog.')
                 ->group(function () {
