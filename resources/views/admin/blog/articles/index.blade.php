@@ -7,6 +7,24 @@
         input[type="checkbox"] {
             transform: scale(1.5);
         }
+
+        /* ✅ مودال أعرض من xl */
+        .rimora-wide-modal {
+            max-width: 1300px;
+            /* عدّليها 1200 - 1400 حسب ما بدك */
+            width: 96%;
+        }
+
+        /* ✅ سكرول داخل البودي */
+        .rimora-wide-modal .modal-body {
+            max-height: calc(100vh - 210px);
+            overflow-y: auto;
+        }
+
+        /* اختياري: شكل أنعم */
+        .rimora-wide-modal .modal-content {
+            border-radius: 18px;
+        }
     </style>
 @endsection
 @section('content')
@@ -120,35 +138,107 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade full-modal-stem" id="full-modal-stem" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+    <!-- ✅ Add Post Modal -->
+    <div class="modal fade" id="full-modal-stem" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+        data-keyboard="false">
+
+        <div class="modal-dialog modal-dialog-centered modal-xl rimora-wide-modal" role="document">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">@lang('add')</h5>
+                    <h5 class="modal-title">@lang('add') @lang('post')</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form action="{{ route('blog.category.store') }}" method="POST" id="add_model_form" class="add-mode-form"
-                    enctype="multipart/form-data">
+                <form action="" method="POST" id="add_model_form" enctype="multipart/form-data">
                     @csrf
 
                     <div class="modal-body">
-                        @foreach (locales() as $key => $value)
-                            <div class="col-12">
+                        <div class="row">
+
+                            {{-- Title --}}
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name_{{ $key }}">@lang('name') @lang($value)</label>
-                                    <input type="text" class="form-control"
-                                        placeholder="@lang('name') @lang($value)"
-                                        name="name_{{ $key }}" id="name_{{ $key }}">
+                                    <label>@lang('title')</label>
+                                    <input type="text" name="title" class="form-control"
+                                        placeholder="@lang('title')">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                        @endforeach
-                    </div> <!-- ✅ إغلاق modal-body -->
+
+                            {{-- Category --}}
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>@lang('category')</label>
+                                    <select name="blog_category_id" class="form-control">
+                                        <option selected disabled>@lang('select') @lang('category')</option>
+                                        {{-- @foreach ($categories as $cat)
+                                        <option value="{{ $cat->id }}">{{ $cat->name_translate }}</option>
+                                    @endforeach --}}
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            {{-- Article Language --}}
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>@lang('article_language')</label>
+                                    <select name="language" class="form-control">
+                                        <option selected disabled>@lang('select') @lang('article_language')</option>
+                                        <option value="ar">العربية</option>
+                                        <option value="en">English</option>
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <hr>
+                            </div>
+
+                            {{-- Excerpt --}}
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>@lang('excerpt')</label>
+                                    <textarea name="excerpt" class="form-control" rows="3" placeholder="@lang('excerpt')"></textarea>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            {{-- Content --}}
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>@lang('content')</label>
+                                    <textarea name="content" class="form-control ck_add" rows="8" placeholder="@lang('content')"></textarea>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <hr>
+                            </div>
+
+                            {{-- SEO --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@lang('meta_title')</label>
+                                    <input type="text" name="meta_title" class="form-control"
+                                        placeholder="@lang('meta_title')">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@lang('meta_description')</label>
+                                    <textarea name="meta_description" class="form-control" rows="2" placeholder="@lang('meta_description')"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
 
                     <div class="modal-footer">
                         <button class="btn btn-primary done" type="submit">@lang('save')</button>
@@ -160,6 +250,9 @@
             </div>
         </div>
     </div>
+
+
+
 
 
     <!-- Modal -->
@@ -306,4 +399,65 @@
             });
         });
     </script>
+<script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/ckeditor.js"></script>
+
+<script>
+    let ckAddEditor = null;
+
+    function initAddCkEditor() {
+        const el = document.querySelector('#full-modal-stem textarea.ck_add');
+        if (!el) return;
+
+        // لا تعيدي التهيئة
+        if (ckAddEditor) return;
+
+        ClassicEditor.create(el, {
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'link',
+                'bulletedList', 'numberedList', '|',
+                'blockQuote', 'insertTable', '|',
+                'imageUpload', '|',
+                'undo', 'redo'
+            ],
+
+            // ✅ هذا هو المهم لتفعيل رفع الصور
+            simpleUpload: {
+                uploadUrl: "{{ route('admin.ck.upload') }}",
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }
+        })
+        .then(editor => {
+            ckAddEditor = editor;
+        })
+        .catch(error => console.error('CKEditor init error:', error));
+    }
+
+    function destroyAddCkEditor() {
+        if (!ckAddEditor) return;
+        ckAddEditor.destroy()
+            .then(() => ckAddEditor = null)
+            .catch(err => console.error('CKEditor destroy error:', err));
+    }
+
+    // ✅ فعّل عند فتح المودال
+    $('#full-modal-stem').on('shown.bs.modal', function () {
+        initAddCkEditor();
+    });
+
+    // ✅ دمّر عند الإغلاق (حتى ما يصير مشاكل إعادة فتح)
+    $('#full-modal-stem').on('hidden.bs.modal', function () {
+        destroyAddCkEditor();
+    });
+
+    // ✅ قبل إرسال الفورم: حطي محتوى الإيديتور داخل textarea
+    $('#add_model_form').on('submit', function () {
+        if (ckAddEditor) {
+            document.querySelector('#full-modal-stem textarea.ck_add').value = ckAddEditor.getData();
+        }
+    });
+</script>
+
 @endsection
